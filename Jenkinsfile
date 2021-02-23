@@ -8,7 +8,7 @@ pipeline{
   stages {
       stage("Maven Build"){
           steps{
-              sh 'mvn compile'
+              sh 'mvn -B -DskipTests clean package'
           }
       }
       stage('Maven Test'){
