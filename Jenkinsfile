@@ -38,7 +38,7 @@ pipeline{
            "files" :[
            {
            "pattern":"target/*.jar",
-           "target":"artifactory-docker-dev-local"
+           "target":"art-doc-devo-loc"
            }
            ]
          }''',
