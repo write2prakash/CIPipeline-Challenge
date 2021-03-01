@@ -21,7 +21,7 @@ pipeline{
                script{
                   last_started=env.STAGE_NAME
             }
-                sh 'mn test'
+                sh 'mvn test'
             }
             post{
             always{
