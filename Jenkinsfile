@@ -8,12 +8,20 @@ pipeline{
   stages {
       stage("Maven Build"){
           steps{
+             script{
+                last_started=env.STAGE_NAME
+               }
               sh 'mvn -B -DskipTests clean package'
+             
           }
+        
       }
       stage('Maven Test'){
             steps{
-                sh 'mvn test'
+               script{
+                  last_started=env.STAGE_NAME
+            }
+                sh 'mn test'
             }
             post{
             always{
@@ -24,7 +32,11 @@ pipeline{
      stage("Build & SonarQube analysis") {
             agent any
             steps {
+               script{
+                    last_started=env.STAGE_NAME
+            }
               withSonarQubeEnv('Sonar-Service2') {
+                 
                 sh 'java -version'
                 sh 'mvn clean package sonar:sonar'
               }
@@ -32,11 +44,17 @@ pipeline{
           }
      stage("Quality gate") {
             steps {
+               script{
+                  last_started=env.STAGE_NAME
+            }
                 waitForQualityGate abortPipeline: true
             }
         }
      stage('Deploy to artifactory'){
         steps{
+           script{
+              last_started=env.STAGE_NAME
+            }
         rtUpload(
          serverId : 'ARTIFACTORY_SERVER',
          spec :'''{
@@ -61,13 +79,13 @@ pipeline{
             emailext attachLog: true, body: "<b>Example</b><br>Project: ${env.JOB_NAME}", from: 'mukeshkousalya2k17@gmail.com', mimeType: 'text/html', replyTo: '', subject: "Deploy Success CI: Project name -> ${env.JOB_NAME}", to: "mukeshkousalya2k17@gmail.com";
          }  
          failure {  
-             mail bcc: '', body: "<b>Example</b><br>Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> URL de build: ${env.BUILD_URL}", cc: '', charset: 'UTF-8', from: 'mukeshkousalya2k17@gmail.com', mimeType: 'text/html', replyTo: '', subject: "ERROR CI: Project name -> ${env.JOB_NAME}", to: "mukeshkousalya2k17@gmail.com";  
+             mail bcc: '', body: "<b>Example</b><br>Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> Stage Name: $last_Started <br> URL de build: ${env.BUILD_URL}", cc: '', charset: 'UTF-8', from: 'mukeshkousalya2k17@gmail.com', mimeType: 'text/html', replyTo: '', subject: "ERROR CI: Project name -> ${env.JOB_NAME}", to: "mukeshkousalya2k17@gmail.com";  
          }  
          unstable {  
              echo 'This will run only if the run was marked as unstable'  
          }  
          changed {  
-             echo 'This will run only if the state of the Pipeline has changed'  
+             echo 'This will run only if the state of the Pipeline has changed'   
              echo 'For example, if the Pipeline was previously failing but is now successful'  
          }  
      }
