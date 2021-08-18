@@ -35,7 +35,7 @@ pipeline{
                script{
                     last_started=env.STAGE_NAME
             }
-              withSonarQubeEnv('Sonar-Service2') {
+              withSonarQubeEnv('Sonar Service') {
                  
                 sh 'java -version'
                 sh 'mvn clean package sonar:sonar'
