@@ -42,33 +42,8 @@ pipeline{
               }
             }
           }
-     stage("Quality gate") {
-            steps {
-               script{
-                  last_started=env.STAGE_NAME
-            }
-                waitForQualityGate abortPipeline: true
-            }
-        }
-     stage('Deploy to artifactory'){
-        steps{
-           script{
-              last_started=env.STAGE_NAME
-            }
-        rtUpload(
-         serverId : 'ARTIFACTORY_SERVER',
-         spec :'''{
-           "files" :[
-           {
-           "pattern":"target/*.jar",
-           "target":"art-doc-devo-loc"
-           }
-           ]
-         }''',
-         
-      )
-      }
-     }
+    
+ 
     }
     post {  
          always {  
@@ -76,10 +51,10 @@ pipeline{
          }  
          success {   
             echo "========Deploying executed successfully========"
-            emailext attachLog: true, body: "<b>Example</b><br>Project: ${env.JOB_NAME}", from: 'mukeshkousalya2k17@gmail.com', mimeType: 'text/html', replyTo: '', subject: "Deploy Success CI: Project name -> ${env.JOB_NAME}", to: "mukeshkousalya2k17@gmail.com";
+            emailext attachLog: true, body: "<b>Example</b><br>Project: ${env.JOB_NAME}", from: 'mailtoprakashcbe@gmail.com', mimeType: 'text/html', replyTo: '', subject: "Deploy Success CI: Project name -> ${env.JOB_NAME}", to: "mailtoprakashcbe@gmail.com";
          }  
          failure {  
-             mail bcc: '', body: "<b>Example</b><br>Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> Stage Name: $last_started <br> URL de build: ${env.BUILD_URL}", cc: '', charset: 'UTF-8', from: 'mukeshkousalya2k17@gmail.com', mimeType: 'text/html', replyTo: '', subject: "ERROR CI: Project name -> ${env.JOB_NAME}", to: "mukeshkousalya2k17@gmail.com";  
+             mail bcc: '', body: "<b>Example</b><br>Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> Stage Name: $last_started <br> URL de build: ${env.BUILD_URL}", cc: '', charset: 'UTF-8', from: 'mailtoprakashcbe@gmail.com', mimeType: 'text/html', replyTo: '', subject: "ERROR CI: Project name -> ${env.JOB_NAME}", to: "mailtoprakashcbe@gmail.com";  
          }  
          unstable {  
              echo 'This will run only if the run was marked as unstable'  
