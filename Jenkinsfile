@@ -70,6 +70,24 @@ pipeline{
       )
       }
      }
+     
+      stage('download from artifactory')
+         {
+            steps{
+     
+                rtDownload (
+                    serverId: 'ARTIFACTORY_SERVER',
+                    spec: '''{
+                    "files": [
+                         {
+                             "pattern": "maven-repo-arti/",
+                             "target": ""
+                        }
+                     ]
+                }''',
+ 
+)
+     }}
  
     
  
