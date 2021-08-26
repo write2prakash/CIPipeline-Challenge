@@ -62,7 +62,7 @@ pipeline{
            "files" :[
            {
            "pattern":"target/*.jar",
-           "target":"art-doc-devo-loc"
+           "target":"maven-repo-arti"
            }
            ]
          }''',
